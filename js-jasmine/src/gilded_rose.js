@@ -19,11 +19,13 @@ class Shop {
 
       this.decreaseSellIn(i);
 
-      if (this.isQualityBelowOrEqual50(i)) {
+      if (this.isQualityBelowMax(i)) {
         if (this.isBackStagePasses(i)) this.increaseBackStagePassesQuality(i);
+
         if (this.isAgedBrie(i)) this.increaseItemQuality(i);
+
         if (this.isNormalItem(i)) {
-          if (this.isQualityAboveZero(i)) {
+          if (this.isQualityAboveMin(i)) {
             this.decreaseItemQuality(i);
             // Decrease Quality another time if SellIn has expired
             if (this.isSellInExpired(i)) this.decreaseItemQuality(i);
@@ -34,7 +36,7 @@ class Shop {
     return this.items;
   }
 
-  isQualityAboveZero(i) {
+  isQualityAboveMin(i) {
     return this.items[i].quality > 0;
   }
 
@@ -46,7 +48,7 @@ class Shop {
     return this.items[i].name === BACKSTAGE_PASSES;
   }
 
-  isQualityBelowOrEqual50(i) {
+  isQualityBelowMax(i) {
     return this.items[i].quality < 50;
   }
 
