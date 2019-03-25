@@ -12,36 +12,46 @@ class Shop {
   constructor(items = []) {
     this.items = items;
   }
+  
   updateQuality() {
     for (var i = 0; i < this.items.length; i++) {
       if (this.isSulfuras(i)) return this.items;
 
       this.decreaseSellIn(i);
 
-      if (this.items[i].quality < 50) {
-        if (this.items[i].name === BACKSTAGE_PASSES) {
-          this.increaseBackStagePassesQuality(i);
-        }
-        if (this.items[i].name === AGED_BRIE) this.increaseItemQuality(i);
-        if (this.items[i].name != AGED_BRIE && this.items[i].name != BACKSTAGE_PASSES) {
-          if (this.items[i].quality > 0) {
+      if (this.isQualityBelowOrEqual50(i)) {
+        if (this.isBackStagePasses(i)) this.increaseBackStagePassesQuality(i);
+        if (this.isAgedBrie(i)) this.increaseItemQuality(i);
+        if (this.isNormalItem(i)) {
+          if (this.isQualityAboveZero(i)) {
             this.decreaseItemQuality(i);
             // Decrease Quality another time if SellIn has expired
             if (this.isSellInExpired(i)) this.decreaseItemQuality(i);
           }
-        } 
-        // else {
-        //   this.increaseItemQuality(i);
-        // }
-      }
-
-      if (this.items[i].sellIn < 0) {
-          if (this.items[i].name === BACKSTAGE_PASSES) {
-            this.decreaseQualityToZero(i);
-          }
+        }
       }
     }
     return this.items;
+  }
+
+  isQualityAboveZero(i) {
+    return this.items[i].quality > 0;
+  }
+
+  isAgedBrie(i) {
+    return this.items[i].name === AGED_BRIE;
+  }
+
+  isBackStagePasses(i) {
+    return this.items[i].name === BACKSTAGE_PASSES;
+  }
+
+  isQualityBelowOrEqual50(i) {
+    return this.items[i].quality < 50;
+  }
+
+  isNormalItem(i) {
+    return this.items[i].name != AGED_BRIE && this.items[i].name != BACKSTAGE_PASSES;
   }
 
   isSellInExpired(i) {
@@ -61,11 +71,10 @@ class Shop {
   }
 
   increaseBackStagePassesQuality(i) {
-    if (this.items[i].name == BACKSTAGE_PASSES) {
-      this.increaseItemQuality(i);
-      if (this.items[i].sellIn < 11) this.increaseItemQuality(i);
-      if (this.items[i].sellIn < 6) this.increaseItemQuality(i);
-    }
+    this.increaseItemQuality(i);
+    if (this.items[i].sellIn < 11) this.increaseItemQuality(i);
+    if (this.items[i].sellIn < 6) this.increaseItemQuality(i);
+    if (this.items[i].sellIn < 0) this.decreaseQualityToZero(i);
   }
 
   decreaseItemQuality(i) {
