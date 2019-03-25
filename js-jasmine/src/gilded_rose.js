@@ -26,8 +26,10 @@ class Shop {
         if (this.isAgedBrie(i)) 
           this.increaseQuality(i);
       }
-      if (this.isNormalItem(i) && this.isQualityAboveMinValue(i))
-        this.decreaseQuality(i);
+      if (this.isQualityAboveMinValue(i)){
+        if (this.isConjured(i) || this.isNormalItem(i))
+          this.decreaseQuality(i);
+      }
     }
     return this.items;
   }
@@ -42,6 +44,10 @@ class Shop {
 
   isAgedBrie(i) {
     return this.items[i].name === AGED_BRIE;
+  }
+
+  isConjured(i) {
+    return this.items[i].name === CONJURED;
   }
 
   isBackStagePasses(i) {
@@ -65,7 +71,7 @@ class Shop {
   }
 
   decreaseQuality(i) {
-    if (this.isSellInExpired(i)) this.items[i].quality -= 2;
+    if (this.isSellInExpired(i) || this.isConjured(i)) this.items[i].quality -= 2;
     else this.items[i].quality--;
   }
 
