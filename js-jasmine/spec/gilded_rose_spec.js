@@ -2,9 +2,9 @@ var {Shop, Item} = require('../src/gilded_rose.js');
 describe("Gilded Rose", function() {
 
   it("should return foo", function() {
-    const item1 = new Item("foo", 0, 0);
-    const item2 = new Item("bar", 0, 0);
-    const gildedRose = new Shop([ item1, item2 ]);
+    const item01 = new Item("foo", 0, 0);
+    const item02 = new Item("bar", 0, 0);
+    const gildedRose = new Shop([ item01, item02 ]);
     const items = gildedRose.updateQuality();
     expect(items[0].name).toEqual("foo");
     expect(items[1].name).toEqual("bar");

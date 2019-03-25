@@ -1,6 +1,8 @@
 const BACKSTAGE_PASSES = 'Backstage passes';
 const AGED_BRIE = 'Aged Brie';
 const SULFURAS = 'Sulfuras';
+const MAX_VALUE = 50;
+const MIN_VALUE = 0;
 class Item {
   constructor(name, sellIn, quality) {
     this.name = name;
@@ -12,32 +14,27 @@ class Shop {
   constructor(items = []) {
     this.items = items;
   }
-  
+
   updateQuality() {
     for (var i = 0; i < this.items.length; i++) {
       if (this.isSulfuras(i)) return this.items;
 
       this.decreaseSellIn(i);
 
-      if (this.isQualityBelowMax(i)) {
-        if (this.isBackStagePasses(i)) this.increaseBackStagePassesQuality(i);
-
-        if (this.isAgedBrie(i)) this.increaseItemQuality(i);
-
-        if (this.isNormalItem(i)) {
-          if (this.isQualityAboveMin(i)) {
-            this.decreaseItemQuality(i);
-            // Decrease Quality another time if SellIn has expired
-            if (this.isSellInExpired(i)) this.decreaseItemQuality(i);
-          }
-        }
+      if (this.isQualityBelowMaxValue(i)) {
+        if (this.isBackStagePasses(i)) 
+          this.increaseBackStagePassesQuality(i);
+        if (this.isAgedBrie(i))
+          this.increaseQuality(i);
+        if (this.isNormalItem(i) && this.isQualityAboveMinValue(i))
+          this.decreaseQuality(i);
       }
     }
     return this.items;
   }
 
-  isQualityAboveMin(i) {
-    return this.items[i].quality > 0;
+  isQualityAboveMinValue(i) {
+    return this.items[i].quality > MIN_VALUE;
   }
 
   isAgedBrie(i) {
@@ -48,8 +45,8 @@ class Shop {
     return this.items[i].name === BACKSTAGE_PASSES;
   }
 
-  isQualityBelowMax(i) {
-    return this.items[i].quality < 50;
+  isQualityBelowMaxValue(i) {
+    return this.items[i].quality < MAX_VALUE;
   }
 
   isNormalItem(i) {
@@ -57,11 +54,11 @@ class Shop {
   }
 
   isSellInExpired(i) {
-    return this.items[i].sellIn < 0;
+    return this.items[i].sellIn < MIN_VALUE;
   }
 
   decreaseQualityToZero(i) {
-    this.items[i].quality = 0;
+    this.items[i].quality = MIN_VALUE;
   }
 
   isSulfuras(i) {
@@ -69,22 +66,23 @@ class Shop {
   }
 
   decreaseSellIn(i) {
-    this.items[i].sellIn = this.items[i].sellIn - 1;
+    this.items[i].sellIn--;
   }
 
   increaseBackStagePassesQuality(i) {
-    this.increaseItemQuality(i);
-    if (this.items[i].sellIn < 11) this.increaseItemQuality(i);
-    if (this.items[i].sellIn < 6) this.increaseItemQuality(i);
+    this.increaseQuality(i);
+    if (this.items[i].sellIn < 11) this.increaseQuality(i);
+    if (this.items[i].sellIn < 6) this.increaseQuality(i);
     if (this.items[i].sellIn < 0) this.decreaseQualityToZero(i);
   }
 
-  decreaseItemQuality(i) {
-    this.items[i].quality -= 1;
+  decreaseQuality(i) {
+    if (this.isSellInExpired(i)) this.items[i].quality -= 2;
+    else this.items[i].quality--;
   }
 
-  increaseItemQuality(i) {
-    this.items[i].quality += 1;
+  increaseQuality(i) {
+    this.items[i].quality++;
   }
 }
 module.exports = {
