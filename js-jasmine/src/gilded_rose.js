@@ -17,24 +17,13 @@ class Shop {
       if (this.items[i].name != AGED_BRIE && this.items[i].name != BACKSTAGE_PASSES) {
         if (this.items[i].quality > 0) {
           if (this.items[i].name != SULFURAS) {
-            this.items[i].quality = this.items[i].quality - 1;
+            this.decreaseItemQuality(i);
           }
         }
       } else {
         if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          if (this.items[i].name == BACKSTAGE_PASSES) {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-          }
+          this.increaseItemQuality(i);
+          this.increaseQualityForBackStagePasses(i);
         }
       }
       if (this.items[i].name != SULFURAS) {
@@ -45,7 +34,7 @@ class Shop {
           if (this.items[i].name != BACKSTAGE_PASSES) {
             if (this.items[i].quality > 0) {
               if (this.items[i].name != SULFURAS) {
-                this.items[i].quality = this.items[i].quality - 1;
+                this.decreaseItemQuality(i);
               }
             }
           } else {
@@ -53,12 +42,31 @@ class Shop {
           }
         } else {
           if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
+            this.increaseItemQuality(i);
           }
         }
       }
     }
     return this.items;
+  }
+
+  increaseQualityForBackStagePasses(i) {
+    if (this.items[i].name == BACKSTAGE_PASSES) {
+      if (this.items[i].sellIn < 11) {
+        this.increaseItemQuality(i);
+      }
+      if (this.items[i].sellIn < 6) {
+        this.increaseItemQuality(i);
+      }
+    }
+  }
+
+  decreaseItemQuality(i) {
+    this.items[i].quality -= 1;
+  }
+
+  increaseItemQuality(i) {
+    this.items[i].quality += 1;
   }
 }
 module.exports = {
