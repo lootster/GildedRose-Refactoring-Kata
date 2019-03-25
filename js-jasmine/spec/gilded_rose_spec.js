@@ -65,5 +65,11 @@ describe("Gilded Rose", function() {
     expect(items[0].quality).toEqual(0);
   });
 
+  it("'Conjured'items degrade in Quality twice as fast as normal items", function() {
+    const gildedRose = new Shop([ new Item("Conjured", 10, 10) ]);
+    const items = gildedRose.updateQualityAndSellIn();
+    expect(items[0].quality).toEqual(8);
+  });
+
 
 });

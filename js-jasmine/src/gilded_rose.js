@@ -1,6 +1,7 @@
 const BACKSTAGE_PASSES = 'Backstage passes';
 const AGED_BRIE = 'Aged Brie';
 const SULFURAS = 'Sulfuras';
+const CONJURED = 'Conjured';
 const MAX_VALUE = 50;
 const MIN_VALUE = 0;
 class Item {
@@ -48,7 +49,7 @@ class Shop {
   }
 
   isNormalItem(i) {
-    return this.items[i].name != AGED_BRIE && this.items[i].name != BACKSTAGE_PASSES;
+    return this.items[i].name != AGED_BRIE && this.items[i].name != BACKSTAGE_PASSES && this.items[i].name !== CONJURED;
   }
 
   isSellInExpired(i) {
@@ -80,7 +81,7 @@ class Shop {
     this.increaseQuality(i);
     if (this.items[i].sellIn < 11) this.increaseQuality(i);
     if (this.items[i].sellIn < 6) this.increaseQuality(i);
-    if (this.items[i].sellIn < 0) this.decreaseQualityToZero(i);
+    if (this.items[i].sellIn < MIN_VALUE) this.decreaseQualityToZero(i);
   }
 }
 
