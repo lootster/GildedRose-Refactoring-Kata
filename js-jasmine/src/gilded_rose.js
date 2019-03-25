@@ -15,26 +15,28 @@ class Shop {
     this.items = items;
   }
 
-  updateQuality() {
+  updateQualityAndSellIn() {
     for (var i = 0; i < this.items.length; i++) {
       if (this.isSulfuras(i)) return this.items;
-
       this.decreaseSellIn(i);
-
       if (this.isQualityBelowMaxValue(i)) {
         if (this.isBackStagePasses(i)) 
           this.increaseBackStagePassesQuality(i);
-        if (this.isAgedBrie(i))
+        if (this.isAgedBrie(i)) 
           this.increaseQuality(i);
-        if (this.isNormalItem(i) && this.isQualityAboveMinValue(i))
-          this.decreaseQuality(i);
       }
+      if (this.isNormalItem(i) && this.isQualityAboveMinValue(i))
+        this.decreaseQuality(i);
     }
     return this.items;
   }
 
   isQualityAboveMinValue(i) {
     return this.items[i].quality > MIN_VALUE;
+  }
+
+  isQualityBelowMaxValue(i) {
+    return this.items[i].quality < MAX_VALUE;
   }
 
   isAgedBrie(i) {
@@ -45,20 +47,12 @@ class Shop {
     return this.items[i].name === BACKSTAGE_PASSES;
   }
 
-  isQualityBelowMaxValue(i) {
-    return this.items[i].quality < MAX_VALUE;
-  }
-
   isNormalItem(i) {
     return this.items[i].name != AGED_BRIE && this.items[i].name != BACKSTAGE_PASSES;
   }
 
   isSellInExpired(i) {
     return this.items[i].sellIn < MIN_VALUE;
-  }
-
-  decreaseQualityToZero(i) {
-    this.items[i].quality = MIN_VALUE;
   }
 
   isSulfuras(i) {
@@ -69,13 +63,6 @@ class Shop {
     this.items[i].sellIn--;
   }
 
-  increaseBackStagePassesQuality(i) {
-    this.increaseQuality(i);
-    if (this.items[i].sellIn < 11) this.increaseQuality(i);
-    if (this.items[i].sellIn < 6) this.increaseQuality(i);
-    if (this.items[i].sellIn < 0) this.decreaseQualityToZero(i);
-  }
-
   decreaseQuality(i) {
     if (this.isSellInExpired(i)) this.items[i].quality -= 2;
     else this.items[i].quality--;
@@ -84,7 +71,19 @@ class Shop {
   increaseQuality(i) {
     this.items[i].quality++;
   }
+
+  decreaseQualityToZero(i) {
+    this.items[i].quality = MIN_VALUE;
+  }
+
+  increaseBackStagePassesQuality(i) {
+    this.increaseQuality(i);
+    if (this.items[i].sellIn < 11) this.increaseQuality(i);
+    if (this.items[i].sellIn < 6) this.increaseQuality(i);
+    if (this.items[i].sellIn < 0) this.decreaseQualityToZero(i);
+  }
 }
+
 module.exports = {
   Item,
   Shop
