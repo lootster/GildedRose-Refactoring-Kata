@@ -70,6 +70,4 @@ describe("Gilded Rose", function() {
     const items = gildedRose.updateQualityAndSellIn();
     expect(items[0].quality).toEqual(8);
   });
-
-
 });

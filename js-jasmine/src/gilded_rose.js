@@ -55,7 +55,9 @@ class Shop {
   }
 
   isNormalItem(i) {
-    return this.items[i].name != AGED_BRIE && this.items[i].name != BACKSTAGE_PASSES && this.items[i].name !== CONJURED;
+    return this.items[i].name !== AGED_BRIE 
+      && this.items[i].name !== BACKSTAGE_PASSES 
+      && this.items[i].name !== CONJURED;
   }
 
   isSellInExpired(i) {
@@ -71,8 +73,10 @@ class Shop {
   }
 
   decreaseQuality(i) {
-    if (this.isSellInExpired(i) || this.isConjured(i)) this.items[i].quality -= 2;
-    else this.items[i].quality--;
+    if (this.isSellInExpired(i) || this.isConjured(i)) 
+      this.items[i].quality -= 2;
+    else 
+      this.items[i].quality--;
   }
 
   increaseQuality(i) {
